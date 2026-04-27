@@ -1,6 +1,9 @@
 package org.study.taxi.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.study.taxi.type.BookingStatus;
 
 
@@ -10,10 +13,13 @@ import java.time.LocalDateTime;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "booking_type")
+@Getter
+@Setter
+@NoArgsConstructor
 public abstract class Booking {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private BigDecimal price;
