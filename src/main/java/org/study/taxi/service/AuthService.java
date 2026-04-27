@@ -24,7 +24,6 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
 
     public AuthResponse register(RegisterRequest request) {
 
@@ -49,24 +48,4 @@ public class AuthService {
         return new AuthResponse("Registration successful", saved.getEmail());
     }
 
-    public AuthResponse login(
-            LoginRequest request,
-            HttpServletRequest httpRequest
-    ) {
-
-        Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.email(),
-                                request.password()
-                        )
-                );
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(authentication);
-
-        httpRequest.getSession(true);
-
-        return new AuthResponse("Login successful", request.email());
-    }
 }
