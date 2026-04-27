@@ -1,18 +1,11 @@
 package org.study.taxi.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.study.taxi.dto.AuthResponse;
-import org.study.taxi.dto.LoginRequest;
 import org.study.taxi.dto.RegisterRequest;
 import org.study.taxi.entity.User;
 import org.study.taxi.repository.UserRepository;
