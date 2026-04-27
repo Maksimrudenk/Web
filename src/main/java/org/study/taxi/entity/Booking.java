@@ -22,10 +22,12 @@ public abstract class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
-
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
