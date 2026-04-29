@@ -2,14 +2,14 @@ package org.study.taxi.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+import org.study.taxi.dto.BookingUpdateRequest;
 import org.study.taxi.dto.CreateBookingRequest;
 import org.study.taxi.entity.Booking;
 import org.study.taxi.service.BookingService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -20,8 +20,30 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Booking //TODO: Remove user.password from the response
-    createBooking(@RequestBody CreateBookingRequest request) {
+    public Booking createBooking(@RequestBody CreateBookingRequest request) {
         return bookingService.createBooking(request);
+    }
+
+    @GetMapping
+    public List<Booking> findAll(Authentication authentication) {
+        return bookingService.findAllForUser(authentication.getName());
+    }
+
+    @GetMapping("/{id}")
+    public Booking findById(@PathVariable Long id, Authentication authentication) {
+        return bookingService.findByIdForUser(id, authentication.getName());
+    }
+
+    @PutMapping("/{id}")
+    public Booking update(@PathVariable Long id,
+            @RequestBody BookingUpdateRequest request,
+            Authentication authentication) {
+        return bookingService.updateBooking(id, request, authentication.getName());
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id, Authentication authentication) {
+        bookingService.deleteBooking(id, authentication.getName());
     }
 }

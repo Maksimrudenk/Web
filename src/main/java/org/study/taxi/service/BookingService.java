@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.study.taxi.dto.BookingUpdateRequest;
 import org.study.taxi.dto.CreateBookingRequest;
 import org.study.taxi.entity.Booking;
 import org.study.taxi.entity.Car;
@@ -15,9 +16,10 @@ import org.study.taxi.repository.CarRepository;
 import org.study.taxi.repository.UserRepository;
 import org.study.taxi.type.BookingStatus;
 import org.study.taxi.type.BookingType;
+import org.study.taxi.type.UserRole;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,7 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final UserRepository userRepository;
     private final CarRepository carRepository;
+    private final PriceService priceService;
 
     public Booking createBooking(CreateBookingRequest request) {
         validateRequiredFields(request);
@@ -45,64 +48,99 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    private void validateRequiredFields(CreateBookingRequest request) {
-        if (request.bookingType() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking type is required");
+    public List<Booking> findAllForUser(String email) {
+        User user = getUserByEmail(email);
+        if (user.getRole() == UserRole.ADMIN) {
+            return bookingRepository.findAll();
         }
-        if (request.userId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User id is required");
+        return bookingRepository.findAll().stream().filter(b -> b.getUser().getId().equals(user.getId())).toList();
+    }
+
+
+    public Booking findByIdForUser(Long id, String email) {
+        Booking booking = getBookingById(id);
+        ensureAccess(booking, email);
+        return booking;
+    }
+
+    public Booking updateBooking(Long id, BookingUpdateRequest request, String email) {
+        Booking booking = getBookingById(id);
+        ensureAccess(booking, email);
+
+        if (request.status() != null) booking.setStatus(request.status());
+
+        if (request.carId() != null) {
+            Car car = carRepository.findById(request.carId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found"));
+            booking.setCar(car);
+            recalculatePrice(booking);
         }
-        if (request.carId() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Car id is required");
+
+        if (request.price() != null) {
+            booking.setPrice(request.price());
+        }
+
+        return bookingRepository.save(booking);
+    }
+
+
+    public void deleteBooking(Long id, String email) {
+        Booking booking = getBookingById(id);
+        ensureAccess(booking, email);
+        bookingRepository.delete(booking);
+    }
+
+    private void ensureAccess(Booking booking, String email) {
+        User actor = getUserByEmail(email);
+        if (actor.getRole() == UserRole.ADMIN) return;
+        if (!booking.getUser().getId().equals(actor.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
         }
     }
 
+    private User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    }
+
+    private Booking getBookingById(Long id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+    }
+
+    private void recalculatePrice(Booking booking) {
+        if (booking instanceof HireBooking hireBooking) {
+            booking.setPrice(priceService.calculateHirePrice(booking.getTimeStart(), hireBooking.getHireEnd(), booking.getCar()));
+        } else if (booking instanceof TripBooking tripBooking) {
+            booking.setPrice(priceService.calculateTripPrice(tripBooking.getPickupLocation(), tripBooking.getDestination(), booking.getCar()));
+        }
+    }
+
+    private void validateRequiredFields(CreateBookingRequest request) {
+        if (request.bookingType() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking type is required");
+        if (request.userId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User id is required");
+        if (request.carId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Car id is required");
+    }
+
     private Booking buildBookingByType(CreateBookingRequest request, Car car) {
+        LocalDateTime start = resolveTimeStart(request.timeStart());
+
         if (request.bookingType() == BookingType.HIRE) {
-            if (request.hireEnd() == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hire end is required for HIRE booking");
-            }
+            if (request.hireEnd() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hire end is required for HIRE booking");
             HireBooking booking = new HireBooking();
             booking.setHireEnd(request.hireEnd());
-
-            LocalDateTime start = resolveTimeStart(request.timeStart());
-
-            long hours = java.time.Duration
-                    .between(start, request.hireEnd())
-                    .toHours();
-
-            if (hours <= 0) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST,
-                        "Hire end must be after start time"
-                );
-            }
-
-            double totalPrice = hours * car.getPrice();
-            booking.setPrice(new BigDecimal(totalPrice));
-
+            booking.setPrice(priceService.calculateHirePrice(start, request.hireEnd(), car));
             return booking;
         }
 
         if (request.bookingType() == BookingType.TRIP) {
             if (request.pickupLocation() == null || request.destination() == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "Pickup location and destination are required for TRIP booking");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pickup location and destination are required for TRIP booking");
             }
             TripBooking booking = new TripBooking();
             booking.setPickupLocation(request.pickupLocation());
             booking.setDestination(request.destination());
-
-            double modifierStart = request.pickupLocation().modifier;
-            double modifierDestination = request.destination().modifier;
-
-            double extra = request.pickupLocation() != request.destination() ? 1 : 0;
-
-            double totalPrice =
-                    (modifierStart + modifierDestination + extra) * car.getPrice();
-
-            booking.setPrice(new BigDecimal(totalPrice));
-
+            booking.setPrice(priceService.calculateTripPrice(request.pickupLocation(), request.destination(), car));
             return booking;
         }
 
