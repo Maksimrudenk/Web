@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<header class="header">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+        <a id="user-link" href="user.html">Profile</a>
+    </div>
+    <nav class="service-bar container">
+        <a href="trip.html">Trip</a>
+        <a href="hire.html">Hire</a>
+        <a href="vanHire.html">Van Hire</a>
+    </nav>
+</header>
+
+<main class="container dashboard-grid">
+    <section class="panel">
+        <h2>My Bookings</h2>
+        <div id="bookings-list" class="scroll-area"></div>
+    </section>
+
+    <section class="panel">
+        <h2>You May Be Interested</h2>
+        <div id="recommendations-list" class="scroll-area"></div>
+    </section>
+</main>
+
+<script src="js/index.js"></script>
+</body>
+</html>

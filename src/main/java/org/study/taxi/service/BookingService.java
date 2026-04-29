@@ -45,6 +45,9 @@ public class BookingService {
         booking.setTimeStart(resolveTimeStart(request.timeStart()));
         booking.setStatus(request.status() != null ? request.status() : BookingStatus.CREATED);
 
+        car.setAvailable(false);
+        carRepository.save(car);
+
         return bookingRepository.save(booking);
     }
 
