@@ -13,7 +13,7 @@ import org.study.taxi.service.SearchService;
 @RestController
 @RequestMapping("/api/cars")
 @RequiredArgsConstructor
-public class SearchController {
+public class CarController {
 
     private final SearchService searchService;
 
