@@ -37,4 +37,9 @@ public class UserController {
     public void deleteUser(@PathVariable Long id, Authentication authentication) {
         userService.deleteUser(id, authentication.getName());
     }
+
+    @GetMapping("/me")
+    public UserResponse getCurrent(Authentication authentication) {
+        return userService.findByEmail(authentication.getName(), authentication.getName());
+    }
 }

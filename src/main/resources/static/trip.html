@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trip Booking</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<header class="header">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+        <a id="user-link" href="index.html">Dashboard</a>
+    </div>
+    <nav class="service-bar container">
+        <a href="trip.html">Trip</a>
+        <a href="hire.html">Hire</a>
+        <a href="vanHire.html">Van Hire</a>
+    </nav>
+</header>
+
+<main class="container booking-layout">
+    <section class="panel booking-panel">
+        <h2>Create Trip Booking</h2>
+        <form id="booking-form" class="booking-form">
+            <label>Start time
+                <input id="time-start" type="datetime-local" required />
+            </label>
+            <label>Pickup location
+                <select id="pickup-location" required></select>
+            </label>
+            <label>Destination
+                <select id="destination" required></select>
+            </label>
+
+            <div class="picker-wrap">
+                <label>Car
+                    <button id="car-picker-toggle" class="picker-toggle" type="button" disabled>Select car</button>
+                </label>
+                <div id="car-picker" class="car-picker hidden">
+                    <div id="tier-tabs" class="tier-tabs"></div>
+                    <div id="cars-list" class="scroll-area"></div>
+                </div>
+            </div>
+
+            <button class="submit-btn" type="submit" disabled id="submit-btn">Create booking</button>
+            <p id="form-message" class="muted"></p>
+        </form>
+    </section>
+</main>
+
+<script src="js/bookingForm.js"></script>
+<script src="js/trip.js"></script>
+</body>
+</html>

@@ -44,4 +44,31 @@ public class IndexController {
                 .contentLength(resource.contentLength())
                 .body(resource);
     }
+
+    @GetMapping(value = "/trip.html", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<Resource> trip(Authentication authentication) throws IOException {
+        ensureCustomer(authentication);
+        return htmlResponse(new ClassPathResource("static/trip.html"));
+    }
+
+    @GetMapping(value = "/hire.html", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<Resource> hire(Authentication authentication) throws IOException {
+        ensureCustomer(authentication);
+        return htmlResponse(new ClassPathResource("static/hire.html"));
+    }
+
+    @GetMapping(value = "/vanHire.html", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<Resource> vanHire(Authentication authentication) throws IOException {
+        ensureCustomer(authentication);
+        return htmlResponse(new ClassPathResource("static/vanHire.html"));
+    }
+
+    private void ensureCustomer(Authentication authentication) {
+        User actor = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated"));
+
+        if (actor.getRole() != UserRole.CUSTOMER) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Customer role required");
+        }
+    }
 }

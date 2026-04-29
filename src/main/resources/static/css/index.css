@@ -164,3 +164,93 @@ a:hover {
     text-align: center;
     background: #fbfdff;
 }
+
+.booking-layout {
+    padding: 22px 0;
+}
+
+.booking-panel {
+    min-height: auto;
+}
+
+.booking-form {
+    padding: 18px;
+    display: grid;
+    gap: 12px;
+}
+
+.booking-form label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.booking-form input,
+.booking-form select,
+.picker-toggle {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+    font: inherit;
+}
+
+.picker-wrap {
+    display: grid;
+    gap: 8px;
+}
+
+.car-picker {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    max-height: 420px;
+    overflow: hidden;
+}
+
+.hidden { display: none; }
+
+.tier-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-bottom: 1px solid var(--line);
+    overflow: auto;
+}
+
+.tier-btn {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    padding: 7px 12px;
+    cursor: pointer;
+}
+
+.tier-btn.active {
+    border-color: #bdd3ff;
+    background: #eef4ff;
+}
+
+.select-card { cursor: pointer; }
+
+.select-card.selected {
+    border-color: #a9c4ff;
+    background: #edf4ff;
+}
+
+.submit-btn {
+    border: none;
+    border-radius: 10px;
+    background: var(--accent-dark);
+    color: #fff;
+    padding: 10px 14px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.submit-btn:disabled,
+.picker-toggle:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
