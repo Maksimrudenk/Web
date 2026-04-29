@@ -1,6 +1,5 @@
 const bookingsList = document.getElementById('bookings-list');
 const recommendationsList = document.getElementById('recommendations-list');
-const userLink = document.getElementById('user-link');
 
 const formatDate = (value) => {
     if (!value) return '—';
@@ -72,14 +71,6 @@ async function loadDashboard() {
         renderBookings(Array.isArray(bookings) ? bookings : []);
         renderRecommendations(Array.isArray(cars) ? cars : []);
 
-        const firstBookingUser = bookings.find((booking) => booking?.user);
-        if (firstBookingUser?.user?.id) {
-            userLink.textContent = firstBookingUser.user.name || 'Profile';
-            userLink.href = `user.html?id=${firstBookingUser.user.id}`;
-        } else if (firstBookingUser?.user?.email) {
-            userLink.textContent = firstBookingUser.user.name || 'Profile';
-            userLink.href = `user.html?email=${encodeURIComponent(firstBookingUser.user.email)}`;
-        }
     } catch (error) {
         setEmpty(bookingsList, 'Failed to load bookings.');
         setEmpty(recommendationsList, 'Failed to load recommendations.');

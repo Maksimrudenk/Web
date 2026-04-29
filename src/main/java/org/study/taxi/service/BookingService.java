@@ -125,7 +125,7 @@ public class BookingService {
         if (request.carId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Car id is required");
     }
 
-    private Booking buildBookingByType(CreateBookingRequest request, Car car) {
+    private Booking buildBookingByType(CreateBookingRequest request, Car car) { //TODO: Check if car is available
         LocalDateTime start = resolveTimeStart(request.timeStart());
 
         if (request.bookingType() == BookingType.HIRE) {

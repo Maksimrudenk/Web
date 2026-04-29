@@ -143,3 +143,4 @@ function createBookingPage(config) {
 
     bootstrap();
 }
+//TODO: make something after submit (reload page or go to the dashboard)
