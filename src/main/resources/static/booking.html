@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Booking Details</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<header class="header">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+        <a id="user-link" href="index.html">Profile</a>
+    </div>
+    <nav class="service-bar container">
+        <a href="trip.html">Trip</a>
+        <a href="hire.html">Hire</a>
+        <a href="vanHire.html">Van Hire</a>
+    </nav>
+</header>
+
+<main class="container booking-layout">
+    <section class="panel booking-panel">
+        <h2>Booking</h2>
+        <div class="booking-section-content">
+            <div id="booking-message" class="muted"></div>
+            <div id="booking-content" class="hidden">
+                <div class="booking-info-grid" id="booking-info"></div>
+                <button id="cancel-booking-btn" class="submit-btn" type="button">Cancel booking</button>
+            </div>
+        </div>
+
+        <div class="booking-section-divider" id="payment-section">
+            <h3>Payment</h3>
+            <form id="payment-form" class="booking-form">
+                <label>Payment details
+                    <input id="payment-details" type="text" placeholder="Card / token" required />
+                </label>
+                <button id="pay-btn" class="submit-btn" type="submit">Pay now</button>
+                <p id="payment-message" class="muted hidden"></p>
+            </form>
+        </div>
+    </section>
+</main>
+
+<div id="payment-success-modal" class="modal hidden" role="alertdialog" aria-modal="true" aria-labelledby="payment-success-title">
+    <div class="modal-card">
+        <h3 id="payment-success-title">Payment successful</h3>
+        <p>Your booking has been paid successfully.</p>
+        <a class="submit-btn link-btn" href="index.html">Go to dashboard</a>
+    </div>
+</div>
+
+<script src="js/headerUser.js"></script>
+<script src="js/booking.js"></script>
+</body>
+</html>

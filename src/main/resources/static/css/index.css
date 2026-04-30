@@ -295,3 +295,59 @@ a:hover {
 .modal-content h3 {
     margin-top: 0;
 }
+
+.booking-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 360px;
+    width: calc(100% - 32px);
+    text-align: center;
+    display: grid;
+    gap: 12px;
+}
+
+.link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.booking-section-content {
+    padding: 16px 18px;
+}
+
+.booking-section-divider {
+    border-top: 1px solid var(--line);
+    padding: 0 18px 18px;
+}
+
+.booking-section-divider h3 {
+    margin: 16px 0 8px;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.booking-section-divider .booking-form {
+    padding: 0;
+}

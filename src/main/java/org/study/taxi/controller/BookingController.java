@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.study.taxi.dto.BookingResponse;
 import org.study.taxi.dto.BookingUpdateRequest;
 import org.study.taxi.dto.CreateBookingRequest;
 import org.study.taxi.entity.Booking;
@@ -20,7 +21,7 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Booking createBooking(@RequestBody CreateBookingRequest request) {
+    public BookingResponse createBooking(@RequestBody CreateBookingRequest request) {
         return bookingService.createBooking(request);
     }
 
@@ -30,12 +31,12 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public Booking findById(@PathVariable Long id, Authentication authentication) {
+    public BookingResponse findById(@PathVariable Long id, Authentication authentication) {
         return bookingService.findByIdForUser(id, authentication.getName());
     }
 
     @PutMapping("/{id}")
-    public Booking update(@PathVariable Long id,
+    public BookingResponse update(@PathVariable Long id,
             @RequestBody BookingUpdateRequest request,
             Authentication authentication) {
         return bookingService.updateBooking(id, request, authentication.getName());

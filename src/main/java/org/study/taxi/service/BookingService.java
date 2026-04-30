@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.study.taxi.dto.BookingResponse;
 import org.study.taxi.dto.BookingUpdateRequest;
 import org.study.taxi.dto.CreateBookingRequest;
 import org.study.taxi.entity.Booking;
@@ -30,7 +31,7 @@ public class BookingService {
     private final CarRepository carRepository;
     private final PriceService priceService;
 
-    public Booking createBooking(CreateBookingRequest request) {
+    public BookingResponse createBooking(CreateBookingRequest request) {
         validateRequiredFields(request);
 
         User user = userRepository.findById(request.userId())
@@ -47,8 +48,9 @@ public class BookingService {
 
         car.setAvailable(false);
         carRepository.save(car);
+        bookingRepository.save(booking);
 
-        return bookingRepository.save(booking);
+        return BookingResponse.toResponse(booking);
     }
 
     public List<Booking> findAllForUser(String email) {
@@ -60,13 +62,13 @@ public class BookingService {
     }
 
 
-    public Booking findByIdForUser(Long id, String email) {
+    public BookingResponse findByIdForUser(Long id, String email) {
         Booking booking = getBookingById(id);
         ensureAccess(booking, email);
-        return booking;
+        return BookingResponse.toResponse(booking);
     }
 
-    public Booking updateBooking(Long id, BookingUpdateRequest request, String email) {
+    public BookingResponse updateBooking(Long id, BookingUpdateRequest request, String email) {
         Booking booking = getBookingById(id);
         ensureAccess(booking, email);
 
@@ -83,7 +85,8 @@ public class BookingService {
             booking.setPrice(request.price());
         }
 
-        return bookingRepository.save(booking);
+        bookingRepository.save(booking);
+        return BookingResponse.toResponse(booking);
     }
 
 
@@ -152,9 +155,9 @@ public class BookingService {
     }
 
     private LocalDateTime resolveTimeStart(LocalDateTime timeStart) {
-        if (timeStart.isBefore(LocalDateTime.now())) {
-            timeStart = null;
+        if (timeStart == null || timeStart.isBefore(LocalDateTime.now())) {
+            return LocalDateTime.now();
         }
-        return timeStart != null ? timeStart : LocalDateTime.now();
+        return timeStart;
     }
 }
