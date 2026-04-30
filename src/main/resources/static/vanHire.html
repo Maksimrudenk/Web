@@ -34,6 +34,13 @@
                     <button id="car-picker-toggle" class="picker-toggle" type="button" disabled>Select van</button>
                 </label>
                 <div id="car-picker" class="car-picker hidden">
+                    <div class="car-filters">
+                        <input id="filter-model" type="text" placeholder="Model" />
+                        <input id="filter-max-price" type="number" min="0" step="0.01" placeholder="Max price" />
+                        <select id="filter-seats">
+                            <option value="">Any seats</option>
+                        </select>
+                    </div>
                     <div id="cars-list" class="scroll-area"></div>
                 </div>
             </div>

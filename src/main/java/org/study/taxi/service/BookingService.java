@@ -130,6 +130,7 @@ public class BookingService {
 
         if (request.bookingType() == BookingType.HIRE) {
             if (request.hireEnd() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hire end is required for HIRE booking");
+            if (request.hireEnd().isBefore(start)) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End time cannot be before start time");
             HireBooking booking = new HireBooking();
             booking.setHireEnd(request.hireEnd());
             booking.setPrice(priceService.calculateHirePrice(start, request.hireEnd(), car));
@@ -151,6 +152,9 @@ public class BookingService {
     }
 
     private LocalDateTime resolveTimeStart(LocalDateTime timeStart) {
+        if (timeStart.isBefore(LocalDateTime.now())) {
+            timeStart = null;
+        }
         return timeStart != null ? timeStart : LocalDateTime.now();
     }
 }
