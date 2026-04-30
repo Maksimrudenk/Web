@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin User Profile</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<header class="header">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+        <a id="user-link" href="user.html">Profile</a>
+    </div>
+</header>
+
+<main class="container user-layout">
+    <section class="panel user-panel">
+        <h2>User data (admin)</h2>
+        <div class="booking-section-content">
+            <p id="user-message" class="muted"></p>
+            <form id="user-form" class="booking-form hidden">
+                <label>Name
+                    <input id="user-name" type="text" required />
+                </label>
+                <label>Email
+                    <input id="user-email" type="email" required />
+                </label>
+                <label>Phone
+                    <input id="user-phone" type="text" />
+                </label>
+                <label>Address
+                    <input id="user-address" type="text" />
+                </label>
+                <button class="submit-btn" type="submit">Save changes</button>
+                <button id="delete-user-btn" class="submit-btn" type="button">Delete user</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="panel user-panel">
+        <h2>All user bookings</h2>
+        <div id="history-list" class="scroll-area"></div>
+    </section>
+</main>
+
+<script src="js/headerUser.js"></script>
+<script src="js/adminUser.js"></script>
+</body>
+</html>

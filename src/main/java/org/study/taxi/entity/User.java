@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.study.taxi.type.UserRole;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -32,4 +35,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Booking> bookings = new ArrayList<>();
 }

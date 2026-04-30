@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.study.taxi.dto.CarResponse;
 import org.study.taxi.dto.CarSearchRequest;
 import org.study.taxi.entity.Car;
 import org.study.taxi.repository.CarRepository;
@@ -18,7 +19,7 @@ public class SearchService {
 
     private final CarRepository carRepository;
 
-    public Page<Car> searchCars(CarSearchRequest request) {
+    public Page<CarResponse> searchCars(CarSearchRequest request) {
 
         int page = request.page() != null && request.page() >= 0
                 ? request.page()

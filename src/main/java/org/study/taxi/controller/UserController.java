@@ -9,6 +9,8 @@ import org.study.taxi.dto.UserUpdateRequest;
 import org.study.taxi.service.AuthService;
 import org.study.taxi.service.UserService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -27,12 +29,22 @@ public class UserController {
         return userService.findByEmail(email, authentication.getName());
     }
 
+    @GetMapping("/all")
+    public List<UserResponse> findAll(Authentication authentication) {
+        return userService.findAll(authentication.getName());
+    }
+
     @PutMapping("/{id}")
     public UserResponse updateUser(@PathVariable Long id,
                                    @RequestBody UserUpdateRequest request,
                                    Authentication authentication) {
+        UserResponse currentUser = userService.findById(id, authentication.getName());
         UserResponse updatedUser = userService.updateUser(id, request, authentication.getName());
-        authService.refreshAuthenticationIfNeeded(authentication, updatedUser.email());
+
+        if (currentUser.email().equals(authentication.getName())) {
+            authService.refreshAuthenticationIfNeeded(authentication, updatedUser.email());
+        }
+
         return updatedUser;
     }
 

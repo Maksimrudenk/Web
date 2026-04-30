@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.study.taxi.dto.CarRequest;
+import org.study.taxi.dto.CarResponse;
 import org.study.taxi.dto.CarSearchRequest;
 import org.study.taxi.entity.Car;
 import org.study.taxi.service.CarService;
@@ -23,22 +24,22 @@ public class CarController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Car createCar(@RequestBody CarRequest request, Authentication authentication) {
+    public CarResponse createCar(@RequestBody CarRequest request, Authentication authentication) {
         return carService.createCar(request, authentication.getName());
     }
 
     @GetMapping
-    public List<Car> findAll() {
+    public List<CarResponse> findAll() {
         return carService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Car findById(@PathVariable Long id) {
-        return carService.findById(id);
+    public CarResponse findById(@PathVariable Long id) {
+        return carService.findCarResponseById(id);
     }
 
     @PutMapping("/{id}")
-    public Car updateCar(@PathVariable Long id, @RequestBody CarRequest request, Authentication authentication) {
+    public CarResponse updateCar(@PathVariable Long id, @RequestBody CarRequest request, Authentication authentication) {
         return carService.updateCar(id, request, authentication.getName());
     }
 
@@ -48,7 +49,7 @@ public class CarController {
         carService.deleteCar(id, authentication.getName());
     }
     @PostMapping("/search")
-    public Page<Car> searchCars(@RequestBody CarSearchRequest request) {
+    public Page<CarResponse> searchCars(@RequestBody CarSearchRequest request) {
         return searchService.searchCars(request);
     }
 }

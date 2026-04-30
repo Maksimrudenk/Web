@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.study.taxi.type.CarClass;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "cars")
 @Getter
@@ -28,4 +31,7 @@ public class Car {
     private CarClass serviceTier;
 
     private boolean available;
+
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Booking> bookings = new ArrayList<>();
 }

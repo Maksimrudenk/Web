@@ -14,7 +14,7 @@ public record BookingResponse(
         BigDecimal price,
         LocalDateTime timeStart,
         BookingStatus status,
-        Car car,
+        CarResponse car,
         Long userId,
         BookingType bookingType
 ) {
@@ -25,7 +25,7 @@ public record BookingResponse(
                 booking.getPrice(),
                 booking.getTimeStart(),
                 booking.getStatus(),
-                booking.getCar(),
+                CarResponse.toResponse(booking.getCar()),
                 booking.getUser().getId(),
                 bookingType
         );

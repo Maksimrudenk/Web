@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<header class="header">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+        <a id="user-link" href="user.html">Profile</a>
+    </div>
+</header>
+
+<main class="container dashboard-grid">
+    <section class="panel">
+        <h2>Users</h2>
+        <div class="scroll-area">
+            <a class="submit-btn" href="register.html">Create new user</a>
+            <div id="users-list"></div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <h2>Cars</h2>
+        <div class="scroll-area">
+            <a class="submit-btn" href="createCar.html">Create new car</a>
+            <div id="cars-list"></div>
+        </div>
+    </section>
+</main>
+
+<script src="js/headerUser.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

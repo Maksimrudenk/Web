@@ -10,6 +10,8 @@ import org.study.taxi.entity.User;
 import org.study.taxi.repository.UserRepository;
 import org.study.taxi.type.UserRole;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -33,6 +35,14 @@ public class UserService {
         validateAccess(actor, target);
 
         return UserResponse.from(target);
+    }
+
+    public List<UserResponse> findAll(String actorEmail) {
+        User actor = findActor(actorEmail);
+        if (actor.getRole() != UserRole.ADMIN) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Admin access required");
+        }
+        return userRepository.findAll().stream().map(UserResponse::from).toList();
     }
 
     public UserResponse updateUser(Long userId, UserUpdateRequest request, String actorEmail) {

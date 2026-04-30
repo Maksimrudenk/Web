@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Car</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<header class="header">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+        <a id="user-link" href="user.html">Profile</a>
+    </div>
+</header>
+<main class="container user-layout">
+    <section class="panel user-panel">
+        <h2 id="car-title">Car</h2>
+        <div class="booking-section-content">
+            <p id="car-message" class="muted"></p>
+            <form id="car-form" class="booking-form">
+                <label>Model<input id="car-model" type="text" required /></label>
+                <label>Registration Number<input id="car-reg" type="text" required /></label>
+                <label>Seats<input id="car-seats" type="number" min="1" required /></label>
+                <label>Price<input id="car-price" type="number" min="0" step="0.01" required /></label>
+                <label>Class
+                    <select id="car-tier">
+                        <option value="ECONOMY">ECONOMY</option>
+                        <option value="COMFORT">COMFORT</option>
+                        <option value="BUSINESS">BUSINESS</option>
+                    </select>
+                </label>
+                <label><input id="car-available" type="checkbox" /> Available</label>
+                <button class="submit-btn" type="submit">Save car</button>
+                <button id="delete-car-btn" class="submit-btn" type="button">Delete car</button>
+            </form>
+        </div>
+    </section>
+</main>
+<script src="js/headerUser.js"></script>
+<script src="js/adminCar.js"></script>
+</body>
+</html>

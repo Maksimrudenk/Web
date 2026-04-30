@@ -30,6 +30,11 @@ public class BookingController {
         return bookingService.findAllForUser(authentication.getName());
     }
 
+    @GetMapping("/user/{userId}")
+    public List<BookingResponse> findByUserId(@PathVariable Long userId, Authentication authentication) {
+        return bookingService.findAllForUserId(userId, authentication.getName());
+    }
+
     @GetMapping("/{id}")
     public BookingResponse findById(@PathVariable Long id, Authentication authentication) {
         return bookingService.findByIdForUser(id, authentication.getName());

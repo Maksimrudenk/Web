@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.study.taxi.dto.CarRequest;
+import org.study.taxi.dto.CarResponse;
 import org.study.taxi.entity.Car;
 import org.study.taxi.entity.User;
 import org.study.taxi.repository.CarRepository;
@@ -20,15 +21,17 @@ public class CarService {
     private final CarRepository carRepository;
     private final UserRepository userRepository;
 
-    public Car createCar(CarRequest request, String email) {
+    public CarResponse createCar(CarRequest request, String email) {
         ensureAdmin(email);
         Car car = new Car();
         applyRequest(car, request);
-        return carRepository.save(car);
+        carRepository.save(car);
+        return CarResponse.toResponse(car);
     }
 
-    public List<Car> findAll() {
-        return carRepository.findAll();
+    public List<CarResponse> findAll() {
+        List<Car> cars = carRepository.findAll();
+        return cars.stream().map(CarResponse::toResponse).toList();
     }
 
     public Car findById(Long id) {
@@ -36,17 +39,25 @@ public class CarService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found"));
     }
 
-    public Car updateCar(Long id, CarRequest request, String email) {
+    public CarResponse findCarResponseById(Long id) {
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found"));
+        return CarResponse.toResponse(car);
+    }
+
+    public CarResponse updateCar(Long id, CarRequest request, String email) {
         ensureAdmin(email);
         Car car = findById(id);
         applyRequest(car, request);
-        return carRepository.save(car);
+        carRepository.save(car);
+        return CarResponse.toResponse(car);
     }
 
-    public Car setAvailability(Long id, boolean available) {
+    public CarResponse setAvailability(Long id, boolean available) {
         Car car = findById(id);
         car.setAvailable(available);
-        return carRepository.save(car);
+        carRepository.save(car);
+        return CarResponse.toResponse(car);
     }
 
 

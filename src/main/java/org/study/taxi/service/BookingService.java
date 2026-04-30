@@ -68,6 +68,17 @@ public class BookingService {
         return BookingResponse.toResponse(booking);
     }
 
+    public List<BookingResponse> findAllForUserId(Long userId, String actorEmail) {
+        User actor = getUserByEmail(actorEmail);
+        if (actor.getRole() != UserRole.ADMIN && !actor.getId().equals(userId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
+        }
+        return bookingRepository.findAll().stream()
+                .filter(b -> b.getUser().getId().equals(userId))
+                .map(BookingResponse::toResponse)
+                .toList();
+    }
+
     public BookingResponse updateBooking(Long id, BookingUpdateRequest request, String email) {
         Booking booking = getBookingById(id);
         ensureAccess(booking, email);
