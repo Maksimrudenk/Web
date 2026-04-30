@@ -2,6 +2,9 @@ package org.study.taxi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,6 +20,30 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public void refreshAuthenticationIfNeeded(Authentication authentication, String updatedEmail) {
+        if (authentication == null || updatedEmail == null || updatedEmail.equals(authentication.getName())) {
+            return;
+        }
+
+        Object principal = authentication.getPrincipal();
+        Object credentials = authentication.getCredentials();
+
+        if (principal instanceof org.springframework.security.core.userdetails.User userDetails) {
+            principal = org.springframework.security.core.userdetails.User.withUsername(updatedEmail)
+                    .password(userDetails.getPassword())
+                    .authorities(userDetails.getAuthorities())
+                    .build();
+        }
+
+        UsernamePasswordAuthenticationToken refreshedAuth = new UsernamePasswordAuthenticationToken(
+                principal,
+                credentials,
+                authentication.getAuthorities()
+        );
+        refreshedAuth.setDetails(authentication.getDetails());
+        SecurityContextHolder.getContext().setAuthentication(refreshedAuth);
+    }
 
     public AuthResponse register(RegisterRequest request) {
 

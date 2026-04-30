@@ -351,3 +351,14 @@ a:hover {
 .booking-section-divider .booking-form {
     padding: 0;
 }
+
+.user-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    padding: 22px 0;
+}
+
+.user-panel {
+    min-height: 520px;
+}

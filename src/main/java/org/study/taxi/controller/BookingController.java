@@ -26,7 +26,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<Booking> findAll(Authentication authentication) {
+    public List<BookingResponse> findAll(Authentication authentication) {
         return bookingService.findAllForUser(authentication.getName());
     }
 

@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.study.taxi.dto.UserResponse;
 import org.study.taxi.dto.UserUpdateRequest;
+import org.study.taxi.service.AuthService;
 import org.study.taxi.service.UserService;
 
 @RestController
@@ -14,6 +15,7 @@ import org.study.taxi.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("/{id}")
     public UserResponse getById(@PathVariable Long id, Authentication authentication) {
@@ -29,7 +31,9 @@ public class UserController {
     public UserResponse updateUser(@PathVariable Long id,
                                    @RequestBody UserUpdateRequest request,
                                    Authentication authentication) {
-        return userService.updateUser(id, request, authentication.getName());
+        UserResponse updatedUser = userService.updateUser(id, request, authentication.getName());
+        authService.refreshAuthenticationIfNeeded(authentication, updatedUser.email());
+        return updatedUser;
     }
 
     @DeleteMapping("/{id}")

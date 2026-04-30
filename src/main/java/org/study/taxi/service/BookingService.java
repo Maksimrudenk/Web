@@ -53,12 +53,12 @@ public class BookingService {
         return BookingResponse.toResponse(booking);
     }
 
-    public List<Booking> findAllForUser(String email) {
+    public List<BookingResponse> findAllForUser(String email) {
         User user = getUserByEmail(email);
         if (user.getRole() == UserRole.ADMIN) {
-            return bookingRepository.findAll();
+            return bookingRepository.findAll().stream().map(BookingResponse::toResponse).toList();
         }
-        return bookingRepository.findAll().stream().filter(b -> b.getUser().getId().equals(user.getId())).toList();
+        return bookingRepository.findAll().stream().filter(b -> b.getUser().getId().equals(user.getId())).map(BookingResponse::toResponse).toList();
     }
 
 
