@@ -43,6 +43,13 @@ public class CarService {
         return carRepository.save(car);
     }
 
+    public Car setAvailability(Long id, boolean available) {
+        Car car = findById(id);
+        car.setAvailable(available);
+        return carRepository.save(car);
+    }
+
+
     public void deleteCar(Long id, String email) {
         ensureAdmin(email);
         Car car = findById(id);

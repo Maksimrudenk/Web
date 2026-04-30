@@ -30,6 +30,7 @@ public class BookingService {
     private final UserRepository userRepository;
     private final CarRepository carRepository;
     private final PriceService priceService;
+    private final CarService carService;
 
     public BookingResponse createBooking(CreateBookingRequest request) {
         validateRequiredFields(request);
@@ -46,8 +47,7 @@ public class BookingService {
         booking.setTimeStart(resolveTimeStart(request.timeStart()));
         booking.setStatus(request.status() != null ? request.status() : BookingStatus.CREATED);
 
-        car.setAvailable(false);
-        carRepository.save(car);
+        carService.setAvailability(car.getId(), false);
         bookingRepository.save(booking);
 
         return BookingResponse.toResponse(booking);
@@ -72,7 +72,12 @@ public class BookingService {
         Booking booking = getBookingById(id);
         ensureAccess(booking, email);
 
-        if (request.status() != null) booking.setStatus(request.status());
+        if (request.status() != null) {
+            booking.setStatus(request.status());
+            if (request.status() == BookingStatus.COMPLETED || request.status() == BookingStatus.CANCELLED) {
+                carService.setAvailability(booking.getCar().getId(), true);
+            }
+        }
 
         if (request.carId() != null) {
             Car car = carRepository.findById(request.carId())
@@ -93,6 +98,7 @@ public class BookingService {
     public void deleteBooking(Long id, String email) {
         Booking booking = getBookingById(id);
         ensureAccess(booking, email);
+        carService.setAvailability(booking.getCar().getId(), true);
         bookingRepository.delete(booking);
     }
 
