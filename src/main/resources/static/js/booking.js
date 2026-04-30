@@ -7,6 +7,7 @@ const paymentForm = document.getElementById('payment-form');
 const paymentDetailsInput = document.getElementById('payment-details');
 const paymentMessage = document.getElementById('payment-message');
 const paymentSuccessModal = document.getElementById('payment-success-modal');
+const completeBtn = document.getElementById('complete-booking-btn');
 
 const FINAL_STATUSES = new Set(['PAID', 'CANCELED', 'CANCELLED', 'COMPLETED']);
 const NO_CANCEL_STATUSES = new Set(['CANCELED', 'CANCELLED', 'COMPLETED']);
@@ -36,6 +37,10 @@ function canPay(status) {
     return !FINAL_STATUSES.has(status);
 }
 
+function canComplete(status) {
+    return status === 'PAID';
+}
+
 function renderBooking(booking) {
     bookingInfo.innerHTML = `
       <div><strong>ID:</strong> ${booking.id ?? '—'}</div>
@@ -47,6 +52,7 @@ function renderBooking(booking) {
     `;
 
     cancelBtn.classList.toggle('hidden', !isCancelable(booking.status));
+    completeBtn.classList.toggle('hidden', !canComplete(booking.status));
     paymentSection.classList.toggle('hidden', !canPay(booking.status));
     bookingContent.classList.remove('hidden');
 }
@@ -94,6 +100,29 @@ cancelBtn.addEventListener('click', async () => {
         bookingMessage.textContent = 'Booking canceled.';
     } catch (error) {
         bookingMessage.textContent = 'Failed to cancel booking.';
+        console.error(error);
+    }
+});
+
+completeBtn.addEventListener('click', async () => {
+    if (!bookingState?.id) return;
+
+    try {
+        const response = await fetch(`/api/bookings/${bookingState.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'COMPLETED' })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to complete booking');
+        }
+
+        bookingState = await response.json();
+        renderBooking(bookingState);
+        bookingMessage.textContent = 'Booking marked as completed.';
+    } catch (error) {
+        bookingMessage.textContent = 'Failed to complete booking.';
         console.error(error);
     }
 });

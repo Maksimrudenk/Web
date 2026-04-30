@@ -11,7 +11,7 @@ const setEmpty = (container, message) => {
 };
 
 function renderBookings(bookings) {
-    const activeBookings = bookings.filter((booking) => booking.status !== 'COMPLETED' && booking.status !== 'CANCELED');
+    const activeBookings = bookings.filter((booking) => !['COMPLETED', 'CANCELED', 'CANCELLED'].includes(booking.status));
 
     if (!activeBookings.length) {
         setEmpty(bookingsList, 'No active bookings found.');

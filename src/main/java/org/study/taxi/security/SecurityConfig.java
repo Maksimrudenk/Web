@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/api/auth/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/index.html", false)
+                        .defaultSuccessUrl("/index.html", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
