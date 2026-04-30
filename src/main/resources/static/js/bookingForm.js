@@ -13,6 +13,8 @@ function createBookingPage(config) {
     const seatsFilterSelect = document.getElementById('filter-seats');
     const submitButton = document.getElementById('submit-btn');
     const formMessage = document.getElementById('form-message');
+    const queryParams = new URLSearchParams(window.location.search);
+    const preselectedCarId = Number(queryParams.get('carId'));
 
     const state = {
         selectedTier: config.defaultTier || null,
@@ -67,6 +69,9 @@ function createBookingPage(config) {
         if (!state.selectedCar) {
             submitButton.disabled = true;
         }
+        if (state.cars.length) {
+            renderCars();
+        }
     };
 
     const fetchUserId = async () => {
@@ -100,15 +105,18 @@ function createBookingPage(config) {
     };
 
     const filteredCars = () => state.cars.filter((car) => {
+        const pickerReady = mustEnablePicker();
         if (!car.available) return false;
         if (state.selectedTier && car.serviceTier !== state.selectedTier) return false;
         if (state.filters.model && !car.model.toLowerCase().includes(state.filters.model)) return false;
         if (state.filters.minSeats && car.seats < state.filters.minSeats) return false;
+        if (!pickerReady) return true;
         const carPrice = state.priceCache.get(car.id);
         return !(state.filters.maxPrice !== null && Number.isFinite(carPrice) && carPrice > state.filters.maxPrice);
     });
 
     const preloadPrices = async () => {
+        if (!mustEnablePicker()) return;
         const candidates = state.cars.filter((car) => car.available && (!state.selectedTier || car.serviceTier === state.selectedTier));
         await Promise.all(candidates.map(async (car) => {
             if (state.priceCache.has(car.id)) return;
@@ -124,8 +132,9 @@ function createBookingPage(config) {
             carsList.innerHTML = '<div class="empty">No cars match selected filters.</div>';
             return;
         }
+        const pickerReady = mustEnablePicker();
         const cards = await Promise.all(cars.map(async (car) => {
-            const price = await priceForCar(car);
+            const price = pickerReady ? await priceForCar(car) : 'Set date and time first';
             return `
               <article class="card select-card ${state.selectedCar?.id === car.id ? 'selected' : ''}" data-id="${car.id}">
                 <h3>${car.model}</h3>
@@ -148,10 +157,24 @@ function createBookingPage(config) {
         });
     };
 
+    const applyPreselectedCar = () => {
+        if (!Number.isFinite(preselectedCarId) || preselectedCarId <= 0) return;
+
+        const matchedCar = state.cars.find((car) => car.id === preselectedCarId && car.available);
+        if (!matchedCar) return;
+
+        state.selectedTier = matchedCar.serviceTier;
+        state.selectedCar = matchedCar;
+        pickerToggle.textContent = `${matchedCar.model} (${matchedCar.serviceTier})`;
+        submitButton.disabled = !state.userId;
+    };
+
     const loadCars = async () => {
         const response = await fetch('/api/cars');
         if (!response.ok) throw new Error('Failed to load cars.');
         state.cars = await response.json();
+        applyPreselectedCar();
+        renderTiers();
         populateSeatsFilter();
         await renderCars();
     };
@@ -239,6 +262,7 @@ function createBookingPage(config) {
 
         try {
             await fetchUserId();
+            await loadCars();
         } catch (error) {
             formMessage.textContent = error.message;
         }
