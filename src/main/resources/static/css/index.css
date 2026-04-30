@@ -362,3 +362,22 @@ a:hover {
 .user-panel {
     min-height: 520px;
 }
+
+.booking-form .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.booking-form .checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+}
+
+#create-booking-link {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}

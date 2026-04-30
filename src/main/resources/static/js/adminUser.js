@@ -7,6 +7,7 @@ const nameInput = document.getElementById('user-name');
 const emailInput = document.getElementById('user-email');
 const phoneInput = document.getElementById('user-phone');
 const addressInput = document.getElementById('user-address');
+const createBookingLink = document.getElementById('create-booking-link');
 
 let selectedUserId = null;
 
@@ -35,6 +36,7 @@ function renderHistory(bookings) {
                 <div class="muted">Start: ${formatDate(booking.timeStart)}</div>
                 <div class="muted">Price: ${booking.price ?? '—'}</div>
                 <div class="muted">Type: ${booking.bookingType ?? '—'}</div>
+                <a href="adminBooking.html?id=${booking.id}">Edit booking</a>
             </article>
         `)
         .join('');
@@ -56,6 +58,7 @@ async function loadUser() {
     addressInput.value = user.address || '';
 
     userForm.classList.remove('hidden');
+    createBookingLink.href = `adminBooking.html?userId=${selectedUserId}`;
     userMessage.textContent = '';
 }
 

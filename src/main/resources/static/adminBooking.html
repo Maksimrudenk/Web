@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Booking</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<header class="header">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+        <a id="user-link" href="user.html">Profile</a>
+    </div>
+</header>
+<main class="container booking-layout">
+    <section class="panel booking-panel">
+        <h2 id="booking-title">Admin booking</h2>
+        <form id="booking-form" class="booking-form">
+            <p id="booking-message" class="muted"></p>
+
+            <label>User ID<input id="booking-user-id" type="number" min="1" required readonly /></label>
+            <label>Booking type
+                <select id="booking-type">
+                    <option value="TRIP">TRIP</option>
+                    <option value="HIRE">HIRE</option>
+                </select>
+            </label>
+            <label>Status
+                <select id="booking-status"><option value="CREATED">CREATED</option><option value="PAID">PAID</option><option value="CANCELLED">CANCELLED</option><option value="COMPLETED">COMPLETED</option></select>
+            </label>
+            <label>Start time
+                <input id="time-start" type="datetime-local" required />
+            </label>
+
+            <div id="trip-fields">
+                <label>Pickup location
+                    <select id="pickup-location">
+                        <option value="CITY_CENTRE">CITY_CENTRE</option>
+                        <option value="SUBURB">SUBURB</option>
+                        <option value="AIRPORT">AIRPORT</option>
+                    </select>
+                </label>
+                <label>Destination
+                    <select id="destination">
+                        <option value="CITY_CENTRE">CITY_CENTRE</option>
+                        <option value="SUBURB">SUBURB</option>
+                        <option value="AIRPORT">AIRPORT</option>
+                    </select>
+                </label>
+            </div>
+
+            <div id="hire-fields" class="hidden">
+                <label>Hire end time
+                    <input id="time-end" type="datetime-local" />
+                </label>
+            </div>
+
+            <div class="picker-wrap">
+                <label>Car
+                    <button id="car-picker-toggle" class="picker-toggle" type="button">Select car</button>
+                </label>
+                <div id="car-picker" class="car-picker hidden">
+                    <div id="tier-tabs" class="tier-tabs"></div>
+                    <div class="car-filters">
+                        <input id="filter-model" type="text" placeholder="Model" />
+                        <input id="filter-max-price" type="number" min="0" step="0.01" placeholder="Max price" />
+                        <select id="filter-seats">
+                            <option value="">Any seats</option>
+                        </select>
+                    </div>
+                    <div id="cars-list" class="scroll-area"></div>
+                </div>
+            </div>
+
+            <button class="submit-btn" type="submit" id="save-booking-btn">Save booking</button>
+            <button class="submit-btn" type="button" id="delete-booking-btn">Delete booking</button>
+        </form>
+    </section>
+</main>
+<script src="js/headerUser.js"></script>
+<script src="js/adminBooking.js"></script>
+</body>
+</html>

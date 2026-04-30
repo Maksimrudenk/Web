@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.study.taxi.dto.UserResponse;
 import org.study.taxi.dto.UserUpdateRequest;
+import org.study.taxi.entity.Booking;
+import org.study.taxi.entity.Car;
 import org.study.taxi.entity.User;
+import org.study.taxi.repository.CarRepository;
 import org.study.taxi.repository.UserRepository;
 import org.study.taxi.type.UserRole;
 
@@ -17,6 +20,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CarService carService;
 
     public UserResponse findById(Long id, String actorEmail) {
         User actor = findActor(actorEmail);
@@ -79,7 +83,17 @@ public class UserService {
 
         validateAccess(actor, target);
 
+        releaseCarsFromUserBookings(target);
         userRepository.delete(target);
+    }
+
+    private void releaseCarsFromUserBookings(User target) {
+        for (Booking booking : target.getBookings()) {
+            Car car = booking.getCar();
+            if (car != null && car.getId() != null) {
+                carService.setAvailability(car.getId(), true);
+            }
+        }
     }
 
     private User findActor(String actorEmail) {
