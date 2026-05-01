@@ -136,7 +136,7 @@ function createBookingPage(config) {
         const pickerReady = mustEnablePicker();
         const cards = await Promise.all(cars.map(async (car) => {
             const price = pickerReady ? await priceForCar(car) : 'Set date and time first';
-            const image = car.imgUrl || car.imgurl || 'images/car-default.png';
+            const image = car.imgURL || car.imgurl || 'images/car-default.png';
             return `
               <article class="card car-card select-card ${state.selectedCar?.id === car.id ? 'selected' : ''}" data-id="${car.id}">
                 <img class="car-cover" src="${image}" alt="${car.model}" onerror="this.src='images/car-default.png'" />
@@ -278,4 +278,3 @@ function createBookingPage(config) {
 
     bootstrap();
 }
-//TODO: make something after submit (reload page or go to the dashboard)

@@ -490,7 +490,7 @@ a:hover {
 
 .car-card .car-cover {
     width: 100%;
-    height: 130px;
+    height: 200px;
     object-fit: cover;
     border-radius: 10px;
     border: 2px solid #cbd8f2;

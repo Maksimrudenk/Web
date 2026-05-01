@@ -59,7 +59,7 @@ function renderRecommendations(cars) {
     const randomCars = [...availableCars].sort(() => Math.random() - 0.5).slice(0, 4);
     recommendationsList.innerHTML = randomCars.map((car) => {
         const targetPage = car.serviceTier === 'VAN' ? 'vanHire.html' : 'hire.html';
-        const image = car.imgUrl || car.imgurl || 'images/car-default.png';
+        const image = car.imgURL || car.imgurl || 'images/car-default.png';
         return `
         <article class="card car-card">
           <img class="car-cover" src="${image}" alt="${car.model}" onerror="this.src='images/car-default.png'" />
