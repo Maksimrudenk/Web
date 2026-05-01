@@ -196,6 +196,7 @@ a:hover {
 
 .booking-panel {
     min-height: auto;
+    overflow: visible;
 }
 
 .booking-form {
@@ -229,7 +230,10 @@ a:hover {
     border: 1px solid var(--line);
     border-radius: 12px;
     background: var(--surface);
-    max-height: 420px;
+    min-height: 520px;
+    max-height: min(78vh, 780px);
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 }
 
@@ -258,6 +262,12 @@ a:hover {
     padding: 10px;
     border-bottom: 1px solid var(--line);
     overflow: auto;
+}
+
+#car-picker .scroll-area {
+    flex: 1;
+    min-height: 320px;
+    max-height: none;
 }
 
 .tier-btn {
