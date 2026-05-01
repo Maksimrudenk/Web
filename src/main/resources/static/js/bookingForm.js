@@ -47,6 +47,7 @@ function createBookingPage(config) {
         overlay.className = 'modal-overlay';
         overlay.innerHTML = `
             <div class="modal-content">
+                <img class="modal-icon" src="images/success-green.svg" alt="Success" />
                 <h3>Booking created successfully</h3>
                 <p>Your booking #${bookingId} was created.</p>
                 <a href="index.html">Go to dashboard</a>

@@ -29,6 +29,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/",
+                                "/landing.html",
                                 "/register",
                                 "/login.html",
                                 "/register.html",

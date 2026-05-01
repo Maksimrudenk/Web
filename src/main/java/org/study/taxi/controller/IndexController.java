@@ -22,6 +22,11 @@ public class IndexController {
 
     private final UserRepository userRepository;
 
+    @GetMapping(value = "/", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<Resource> landing() throws IOException {
+        return htmlResponse(new ClassPathResource("static/landing.html"));
+    }
+
     @GetMapping(value = "/index.html", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<Resource> index(Authentication authentication) throws IOException {
         User actor = userRepository.findByEmail(authentication.getName())
