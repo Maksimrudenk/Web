@@ -135,13 +135,20 @@ function createBookingPage(config) {
         const pickerReady = mustEnablePicker();
         const cards = await Promise.all(cars.map(async (car) => {
             const price = pickerReady ? await priceForCar(car) : 'Set date and time first';
+            const image = car.imgUrl || car.imgurl || 'images/car-default.png';
             return `
-              <article class="card select-card ${state.selectedCar?.id === car.id ? 'selected' : ''}" data-id="${car.id}">
-                <h3>${car.model}</h3>
-                <div class="muted">Class: ${car.serviceTier}</div>
-                <div class="muted">Seats: ${car.seats}</div>
-                <div class="muted">Plate: ${car.registrationNumber}</div>
-                <div class="muted">Price: ${price}</div>
+              <article class="card car-card select-card ${state.selectedCar?.id === car.id ? 'selected' : ''}" data-id="${car.id}">
+                <img class="car-cover" src="${image}" alt="${car.model}" onerror="this.src='images/car-default.png'" />
+                <div class="card-head">
+                    <h3>${car.model}</h3>
+                    <span class="tier-pill">${car.serviceTier}</span>
+                </div>
+                <div class="info-grid compact">
+                    <div class="metric"><span class="metric-label">Seats</span><strong><img src="images/user.svg" alt="" class="inline-icon"/>${car.seats}</strong></div>
+                    <div class="metric"><span class="metric-label">Plate</span><strong>${car.registrationNumber}</strong></div>
+                    <div class="metric metric-price"><span class="metric-label">Price</span><strong>${price}</strong></div>
+                    <div class="metric metric-available"><span class="metric-label">Availability</span><strong>Available</strong></div>
+                </div>
               </article>`;
         }));
         carsList.innerHTML = cards.join('');

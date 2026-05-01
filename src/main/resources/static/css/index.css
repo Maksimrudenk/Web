@@ -381,3 +381,85 @@ a:hover {
     width: 100%;
     justify-content: center;
 }
+
+#user-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 2px solid #bfd3ff;
+    border-radius: 999px;
+    background: #eef4ff;
+}
+
+.inline-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+.card {
+    border-width: 2px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7faff 100%);
+}
+
+.card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.metric {
+    border: 2px solid #dbe4f4;
+    border-radius: 12px;
+    padding: 8px;
+    background: #fff;
+}
+
+.metric-label { display:block; color: var(--muted); font-size: .82rem; margin-bottom: 4px;}
+.metric strong { display:inline-flex; align-items:center; gap:6px; }
+.metric-price { border-color:#f8c56a; background:#fff9ea; }
+.metric-tier { border-color:#8ec7ff; background:#eef8ff; }
+.metric-available { border-color:#90e1a6; background:#effdf3; }
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 6px 10px;
+    border: 2px solid;
+    font-weight: 700;
+    font-size: .82rem;
+}
+.status-created { border-color:#7ea6ff; background:#eaf1ff; color:#1f4fca; }
+.status-canceled { border-color:#e79fa2; background:#fff1f1; color:#a9393f; }
+.status-paid { border-color:#89cf98; background:#edfdf0; color:#257238; }
+
+.tier-pill {
+    border: 2px solid #a5c2ff;
+    background: #eef4ff;
+    color: #2456cc;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.car-card .car-cover {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #cbd8f2;
+    margin-bottom: 10px;
+    background: #eef3fb;
+}

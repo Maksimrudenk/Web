@@ -14,6 +14,18 @@ const NO_CANCEL_STATUSES = new Set(['CANCELED', 'CANCELLED', 'COMPLETED']);
 
 let bookingState = null;
 
+function bookingStatusBadge(status) {
+    const key = String(status || '').toUpperCase();
+    const map = {
+        CREATED: ['Created', 'images/bill-list.svg', 'status-created'],
+        CANCELED: ['Canceled', 'images/bill-cross.svg', 'status-canceled'],
+        CANCELLED: ['Canceled', 'images/bill-cross.svg', 'status-canceled'],
+        PAID: ['Paid', 'images/bill-check.svg', 'status-paid']
+    };
+    const [label, icon, cls] = map[key] || [status || 'Unknown', 'images/bill-list.svg', 'status-created'];
+    return `<span class="status-badge ${cls}"><img src="${icon}" alt="" class="inline-icon"/>${label}</span>`;
+}
+
 function getBookingId() {
     const params = new URLSearchParams(window.location.search);
     return params.get('id');
@@ -44,7 +56,7 @@ function canComplete(status) {
 function renderBooking(booking) {
     bookingInfo.innerHTML = `
       <div><strong>ID:</strong> ${booking.id ?? '—'}</div>
-      <div><strong>Status:</strong> ${booking.status ?? '—'}</div>
+      <div><strong>Status:</strong> ${bookingStatusBadge(booking.status)}</div>
       <div><strong>Start:</strong> ${formatDate(booking.timeStart)}</div>
       <div><strong>Price:</strong> ${formatMoney(booking.price)}</div>
       <div><strong>Car:</strong> ${booking.car?.model || '—'}</div>

@@ -9,7 +9,7 @@ async function bindCurrentUserHeader() {
         }
 
         const user = await response.json();
-        userLink.textContent = user?.name || 'Profile';
+        userLink.innerHTML = `<img src="images/user.svg" alt="" class="inline-icon" /> <span>${user?.name || 'Profile'}</span>`;
 
         if (user?.id) {
             userLink.href = `user.html?id=${user.id}`;
@@ -19,7 +19,7 @@ async function bindCurrentUserHeader() {
             userLink.href = 'user.html';
         }
     } catch (error) {
-        userLink.textContent = 'Profile';
+        userLink.innerHTML = '<img src="images/user.svg" alt="" class="inline-icon" /> <span>Profile</span>';
         userLink.href = 'user.html';
         console.error(error);
     }
