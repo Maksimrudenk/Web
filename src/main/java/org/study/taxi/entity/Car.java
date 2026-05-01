@@ -32,6 +32,8 @@ public class Car {
 
     private boolean available;
 
+    private String imgURL;
+
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Booking> bookings = new ArrayList<>();
 }
