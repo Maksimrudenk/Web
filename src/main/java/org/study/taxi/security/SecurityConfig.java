@@ -29,9 +29,10 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/register",
+                                "/register",
                                 "/login.html",
                                 "/register.html",
+                                "/api/auth/register",
                                 "/js/**",
                                 "/css/**"
                         ).permitAll()

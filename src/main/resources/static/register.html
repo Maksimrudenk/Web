@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<header class="header">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+    </div>
+</header>
+
+<main class="container user-layout">
+    <section class="panel user-panel">
+        <h2>Register</h2>
+        <p id="register-message" class="muted"></p>
+        <form id="register-form" class="booking-form">
+            <label>Name<input id="first-name" name="firstName" type="text" required /></label>
+            <label>Email<input id="email" name="email" type="email" required /></label>
+            <label>Password<input id="password" name="password" type="password" minlength="6" required /></label>
+            <label>Address<input id="address" name="address" type="text" required /></label>
+            <label>Phone Number<input id="phone" name="phone" type="text" required /></label>
+            <button class="submit-btn" type="submit">Create Account</button>
+        </form>
+    </section>
+</main>
+<script src="js/register.js"></script>
+</body>
+</html>
