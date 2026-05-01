@@ -2,6 +2,9 @@ async function bindCurrentUserHeader() {
     const userLink = document.getElementById('user-link');
     if (!userLink) return;
 
+    const actionsContainer = ensureHeaderActionsContainer(userLink);
+    ensureLogoutControl(actionsContainer);
+
     try {
         const response = await fetch('/api/users/me');
         if (!response.ok) {
@@ -23,6 +26,48 @@ async function bindCurrentUserHeader() {
         userLink.href = 'user.html';
         console.error(error);
     }
+}
+
+function ensureHeaderActionsContainer(userLink) {
+    if (userLink.parentElement?.classList.contains('header-user-actions')) {
+        return userLink.parentElement;
+    }
+
+    const actionsContainer = document.createElement('div');
+    actionsContainer.className = 'header-user-actions';
+    userLink.replaceWith(actionsContainer);
+    actionsContainer.appendChild(userLink);
+    return actionsContainer;
+}
+
+function ensureLogoutControl(actionsContainer) {
+    if (document.getElementById('logout-button')) return;
+
+    const logoutButton = document.createElement('button');
+    logoutButton.id = 'logout-button';
+    logoutButton.type = 'button';
+    logoutButton.textContent = 'Logout';
+    logoutButton.className = 'logout-btn';
+
+    logoutButton.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/api/auth/logout', {
+                method: 'POST',
+                credentials: 'same-origin'
+            });
+
+            if (!response.ok) {
+                throw new Error('Logout failed');
+            }
+
+            window.location.href = 'login.html';
+        } catch (error) {
+            console.error(error);
+            alert('Could not logout. Please try again.');
+        }
+    });
+
+    actionsContainer.appendChild(logoutButton);
 }
 
 bindCurrentUserHeader();

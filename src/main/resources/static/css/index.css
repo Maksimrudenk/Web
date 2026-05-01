@@ -53,6 +53,31 @@ body {
     justify-content: space-between;
 }
 
+.header-user-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.logout-btn {
+    border: 1px solid #dbe6ff;
+    border-radius: 999px;
+    background: #eef4ff;
+    color: #1f4fca;
+    padding: 8px 12px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: #dfeaff;
+    border-color: #c6d8ff;
+    color: #1944b4;
+}
+
 .service-bar {
     border-top: 1px solid rgba(228, 232, 240, 0.8);
     flex-wrap: wrap;
