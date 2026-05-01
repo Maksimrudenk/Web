@@ -10,6 +10,7 @@ public record CarResponse(
         int seats,
         double price,
         CarClass serviceTier,
+        String imgURL,
         boolean available
 ) {
     public static CarResponse toResponse(Car car) {
@@ -20,6 +21,7 @@ public record CarResponse(
                 car.getSeats(),
                 car.getPrice(),
                 car.getServiceTier(),
+                car.getImgURL(),
                 car.isAvailable()
         );
     }
