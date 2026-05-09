@@ -44,6 +44,7 @@ public class PaymentMock implements PaymentGateway {
                 .transactionId(paymentResult.transactionId())
                 .status(PaymentStatus.SUCCESS)
                 .paymentTime(LocalDateTime.now())
+                .paymentDetails(paymentDetails)
                 .build();
 
         booking.setStatus(BookingStatus.PAID);
