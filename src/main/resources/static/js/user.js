@@ -22,6 +22,15 @@ function formatDate(value) {
     return new Date(value).toLocaleString();
 }
 
+function canOpenReceipt(status) {
+    return status === 'COMPLETED';
+}
+
+function receiptButton(booking) {
+    if (!canOpenReceipt(booking.status)) return '';
+    return `<a href="receipt.html?bookingId=${encodeURIComponent(booking.id)}">Open receipt</a>`;
+}
+
 function renderHistory(bookings) {
     const filtered = bookings.filter(({ status }) => status === 'CANCELLED' || status === 'COMPLETED');
 
@@ -39,6 +48,7 @@ function renderHistory(bookings) {
                 <div class="muted">Start: ${formatDate(booking.timeStart)}</div>
                 <div class="muted">Price: ${booking.price ?? '—'}</div>
                 <div class="muted">Type: ${booking.bookingType ?? '—'}</div>
+               ${receiptButton(booking)}
             </article>
         `)
         .join('');

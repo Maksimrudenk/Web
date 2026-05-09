@@ -18,6 +18,7 @@ const carsList = document.getElementById('cars-list');
 const modelFilterInput = document.getElementById('filter-model');
 const maxPriceFilterInput = document.getElementById('filter-max-price');
 const seatsFilterSelect = document.getElementById('filter-seats');
+const receiptBtn = document.getElementById('receipt-btn');
 
 const params = new URLSearchParams(window.location.search);
 const bookingId = params.get('id');
@@ -27,6 +28,21 @@ let currentUserId = preselectedUserId ? Number(preselectedUserId) : null;
 const state = { selectedTier: 'ECONOMY', selectedCar: null, cars: [], filters: { model: '', maxPrice: null, minSeats: null } };
 
 function typeIsTrip() { return typeInput.value === 'TRIP'; }
+
+function canOpenReceipt(status) {
+    return status === 'PAID' || status === 'COMPLETED';
+}
+
+function syncReceiptLink() {
+    if (!bookingId || !canOpenReceipt(statusInput.value)) {
+        receiptBtn.classList.add('hidden');
+        receiptBtn.dataset.href = '';
+        return;
+    }
+
+    receiptBtn.dataset.href = `receipt.html?bookingId=${encodeURIComponent(bookingId)}`;
+    receiptBtn.classList.remove('hidden');
+}
 
 function syncTypeFields() {
     const isTrip = typeIsTrip();
@@ -151,6 +167,7 @@ async function loadBooking() {
     syncTypeFields();
     state.selectedCar = state.cars.find((car) => car.id === booking.car?.id) || null;
     if (state.selectedCar) pickerToggle.textContent = `${state.selectedCar.model} (${state.selectedCar.serviceTier})`;
+    syncReceiptLink();
 }
 
 bookingForm.addEventListener('submit', async (e) => {
@@ -187,6 +204,9 @@ bookingForm.addEventListener('submit', async (e) => {
             body: JSON.stringify({ status: statusInput.value, carId: state.selectedCar.id })
         });
         if (!response.ok) throw new Error('Failed to update booking');
+        const updated = await response.json();
+        statusInput.value = updated.status || statusInput.value;
+        syncReceiptLink();
         bookingMessage.textContent = 'Booking updated.';
     } catch {
         bookingMessage.textContent = 'Failed to save booking.';
@@ -205,6 +225,8 @@ deleteBtn.addEventListener('click', async () => {
     window.location.href = redirectUserId ? `adminUser.html?id=${redirectUserId}` : 'admin.html';
 });
 
+statusInput.addEventListener('change', syncReceiptLink);
+
 typeInput.addEventListener('change', async () => {
     syncTypeFields();
     await renderCars();
@@ -214,6 +236,12 @@ modelFilterInput.addEventListener('input', async () => { state.filters.model = m
 maxPriceFilterInput.addEventListener('input', async () => { state.filters.maxPrice = maxPriceFilterInput.value ? Number(maxPriceFilterInput.value) : null; await renderCars(); });
 seatsFilterSelect.addEventListener('change', async () => { state.filters.minSeats = seatsFilterSelect.value ? Number(seatsFilterSelect.value) : null; await renderCars(); });
 pickerToggle.addEventListener('click', () => carPicker.classList.toggle('hidden'));
+
+receiptBtn.addEventListener('click', () => {
+    if (receiptBtn.dataset.href) {
+        window.location.href = receiptBtn.dataset.href;
+    }
+});
 
 (async function init() {
     syncTypeFields();

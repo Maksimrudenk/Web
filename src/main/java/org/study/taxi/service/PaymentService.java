@@ -39,6 +39,15 @@ public class PaymentService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found")));
     }
 
+    public PaymentDTO getByBookingId(Long bookingId) {
+        if (bookingId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking id is required");
+        }
+
+        return PaymentDTO.from(paymentRepository.findByBookingId(bookingId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found")));
+    }
+
     public PaymentDTO getByTransactionId(String transactionId) {
         if (transactionId == null || transactionId.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Transaction id is required");

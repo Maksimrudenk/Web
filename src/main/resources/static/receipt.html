@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Receipt</title>
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body class="receipt-page">
+<header class="header receipt-no-print">
+    <div class="top-bar container">
+        <a class="logo" href="index.html">LogoPlaceholder</a>
+        <a id="user-link" href="user.html">Profile</a>
+    </div>
+</header>
+
+<main class="receipt-shell">
+    <section class="receipt-paper" aria-labelledby="receipt-title">
+        <div class="receipt-brand">
+            <div>
+                <p class="receipt-kicker">Taxi service</p>
+                <h1 id="receipt-title">Payment receipt</h1>
+            </div>
+            <div class="receipt-mark">PAID</div>
+        </div>
+
+        <p id="receipt-message" class="muted">Loading receipt...</p>
+
+        <div id="receipt-content" class="hidden">
+            <div class="receipt-divider"></div>
+            <dl class="receipt-details">
+                <div>
+                    <dt>Payment ID</dt>
+                    <dd id="receipt-id">—</dd>
+                </div>
+                <div>
+                    <dt>Transaction ID</dt>
+                    <dd id="receipt-transaction">—</dd>
+                </div>
+                <div>
+                    <dt>Booking ID</dt>
+                    <dd id="receipt-booking">—</dd>
+                </div>
+                <div>
+                    <dt>Status</dt>
+                    <dd id="receipt-status">—</dd>
+                </div>
+                <div>
+                    <dt>Payment time</dt>
+                    <dd id="receipt-time">—</dd>
+                </div>
+                <div>
+                    <dt>Payment details</dt>
+                    <dd id="receipt-details">—</dd>
+                </div>
+            </dl>
+
+            <div class="receipt-total-row">
+                <span>Total paid</span>
+                <strong id="receipt-amount">—</strong>
+            </div>
+
+            <p class="receipt-note">Keep this receipt as confirmation of your taxi booking payment.</p>
+        </div>
+    </section>
+
+    <div class="receipt-actions receipt-no-print">
+        <button id="print-receipt-btn" class="submit-btn" type="button">Print receipt</button>
+        <a class="submit-btn link-btn" href="user.html">Back to profile</a>
+    </div>
+</main>
+
+<script src="js/headerUser.js"></script>
+<script src="js/receipt.js"></script>
+</body>
+</html>

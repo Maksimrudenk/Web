@@ -8,6 +8,7 @@ const paymentDetailsInput = document.getElementById('payment-details');
 const paymentMessage = document.getElementById('payment-message');
 const paymentSuccessModal = document.getElementById('payment-success-modal');
 const completeBtn = document.getElementById('complete-booking-btn');
+const receiptLink = document.getElementById('receipt-link');
 
 const FINAL_STATUSES = new Set(['PAID', 'CANCELED', 'CANCELLED', 'COMPLETED']);
 const NO_CANCEL_STATUSES = new Set(['CANCELED', 'CANCELLED', 'COMPLETED']);
@@ -20,7 +21,8 @@ function bookingStatusBadge(status) {
         CREATED: ['Created', 'images/bill-list.svg', 'status-created'],
         CANCELED: ['Canceled', 'images/bill-cross.svg', 'status-canceled'],
         CANCELLED: ['Canceled', 'images/bill-cross.svg', 'status-canceled'],
-        PAID: ['Paid', 'images/bill-check.svg', 'status-paid']
+        PAID: ['Paid', 'images/bill-check.svg', 'status-paid'],
+        COMPLETED: ['Completed', 'images/success-green.svg', 'status-paid']
     };
     const [label, icon, cls] = map[key] || [status || 'Unknown', 'images/bill-list.svg', 'status-created'];
     return `<span class="status-badge ${cls}"><img src="${icon}" alt="" class="inline-icon"/>${label}</span>`;
@@ -53,6 +55,10 @@ function canComplete(status) {
     return status === 'PAID';
 }
 
+function canOpenReceipt(status) {
+    return status === 'PAID' || status === 'COMPLETED';
+}
+
 function renderBooking(booking) {
     bookingInfo.innerHTML = `
       <div><strong>ID:</strong> ${booking.id ?? '—'}</div>
@@ -66,6 +72,8 @@ function renderBooking(booking) {
     cancelBtn.classList.toggle('hidden', !isCancelable(booking.status));
     completeBtn.classList.toggle('hidden', !canComplete(booking.status));
     paymentSection.classList.toggle('hidden', !canPay(booking.status));
+    receiptLink.classList.toggle('hidden', !canOpenReceipt(booking.status));
+    receiptLink.href = `receipt.html?bookingId=${encodeURIComponent(booking.id)}`;
     bookingContent.classList.remove('hidden');
 }
 

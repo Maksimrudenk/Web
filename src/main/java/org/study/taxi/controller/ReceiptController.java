@@ -20,6 +20,11 @@ public class ReceiptController {
         return paymentService.getReceipt(id);
     }
 
+    @GetMapping("/bookings/{bookingId}")
+    public PaymentDTO getPaymentByBookingId(@PathVariable Long bookingId) {
+        return paymentService.getByBookingId(bookingId);
+    }
+
     @GetMapping("/transactions/{transactionId}")
     public PaymentDTO getPaymentByTransactionId(@PathVariable String transactionId) {
         return paymentService.getByTransactionId(transactionId);
