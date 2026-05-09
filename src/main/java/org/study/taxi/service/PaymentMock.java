@@ -10,7 +10,6 @@ import org.study.taxi.entity.Booking;
 import org.study.taxi.entity.Payment;
 import org.study.taxi.repository.BookingRepository;
 import org.study.taxi.repository.PaymentRepository;
-import org.study.taxi.type.BookingStatus;
 import org.study.taxi.type.PaymentStatus;
 
 import java.time.LocalDateTime;
@@ -46,9 +45,6 @@ public class PaymentMock implements PaymentGateway {
                 .paymentTime(LocalDateTime.now())
                 .paymentDetails(paymentDetails)
                 .build();
-
-        booking.setStatus(BookingStatus.PAID);
-        bookingRepository.save(booking);
 
         return paymentRepository.save(payment);
     }
